@@ -1,19 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${titulo}"></title>
+    <title>Title</title>
 </head>
 <body>
     <!-- Guacamole -->
     <script type="text/javascript"
-        src="guacamole-common-js/all.min.js"></script>
-
-    <table th:if="${not maquinas.isEmpty()}">
-        <tr th:each="maquina: ${maquinas}">
-            <a th:href="@{/mv(machineName=${maquina.getName()})}" th:text="${maquina.getName()}"></a><br>
-        </tr>
-    </table>
+            src="guacamole-common-js/all.min.js"></script>
 
     <!-- Display -->
     <div id="display"></div>

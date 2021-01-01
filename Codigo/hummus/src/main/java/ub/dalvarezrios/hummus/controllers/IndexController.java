@@ -31,7 +31,7 @@ public class IndexController {
     public String openVM(@RequestParam String machineName, Model model){
         vBoxManager.launchMachine(machineName, LaunchMode.headless);
         model.addAttribute("titulo", machineName);
-        return "forward:index";
+        return "display";
     }
 
 }
