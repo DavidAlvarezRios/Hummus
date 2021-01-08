@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titulo}"></title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+</head>
+<body>
+
+    <div th:replace="~{header :: header}">Header</div>
+    <div class="container">
+        <div class="d-flex justify-content-center my-md-5">
+            <form action="#" method="post">
+
+                <div>
+                    <label for="username" class="form-label">Username</label>
+                    <div>
+                        <input class="form-control" type="text" id="username" />
+                    </div>
+                </div>
+
+                <div>
+                    <label for="email" class="form-label" >Email</label>
+                    <div>
+                        <input class="form-control" type="text" id="email" />
+                    </div>
+                </div>
+
+                <div>
+                    <label for="password" class="form-label">Password</label>
+                    <div>
+                        <input class="form-control" type="password" id="password" />
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script th:src="@{/js/bootstrap.js}"></script>
+</body>
+</html>
