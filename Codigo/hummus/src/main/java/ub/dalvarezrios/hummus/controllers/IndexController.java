@@ -18,7 +18,6 @@ public class IndexController {
 
     VBoxManager vBoxManager = new VBoxManager();
 
-
     @GetMapping({"", "/", "/index"})
     public String index(Model model){
         List<IMachine> maquinas = vBoxManager.getMachines(MachineState.PoweredOff);
@@ -27,14 +26,6 @@ public class IndexController {
 
         return "index";
     }
-
-    /*
-    @GetMapping({"", "/", "/index"})
-    public String index(Model model){
-        model.addAttribute("titulo", "Página Home");
-        return "index";
-    }
-     */
 
     @GetMapping("/about")
     public String about(Model model){
