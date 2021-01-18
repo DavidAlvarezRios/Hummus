@@ -1,11 +1,13 @@
 package ub.dalvarezrios.hummus.models.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ub.dalvarezrios.hummus.models.dao.IUserDao;
 import ub.dalvarezrios.hummus.models.entity.User;
 
 import java.util.List;
 
+@Repository
 public class UserService implements IUserService{
 
     @Autowired

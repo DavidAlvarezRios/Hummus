@@ -19,6 +19,7 @@ public class User implements Serializable {
 
     @Column(name="create_at")
     private Date createAt;
+    private boolean enabled;
 
     @PrePersist
     public void prePersist(){
@@ -63,5 +64,13 @@ public class User implements Serializable {
 
     public void setCreateAt(Date createAt) {
         this.createAt = createAt;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
