@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.User.UserBuilder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -19,18 +22,19 @@ import javax.sql.DataSource;
 public class SpringSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    PasswordEncoder encoder;
+    BCryptPasswordEncoder encoder;
 
     @Autowired
     private DataSource dataSource;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    @Autowired
+    protected void configurerGlobal(AuthenticationManagerBuilder auth) throws Exception {
+
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .passwordEncoder(encoder)
@@ -42,15 +46,14 @@ public class SpringSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/", "/index", "/register", "/about", "/css/**", "/js/**").permitAll()
-                .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login").defaultSuccessUrl("/about")
-                .permitAll()
+                    .defaultSuccessUrl("/about")
+                    .permitAll()
                 .and()
-                .logout().permitAll()
+                    .logout().permitAll()
                 .and()
-                .exceptionHandling().accessDeniedPage("/error_403");
+                    .exceptionHandling().accessDeniedPage("/error_403");
 
     }
 
