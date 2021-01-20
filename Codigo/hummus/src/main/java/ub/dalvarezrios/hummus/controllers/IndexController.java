@@ -1,5 +1,8 @@
 package ub.dalvarezrios.hummus.controllers;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +20,7 @@ import java.util.List;
 public class IndexController {
 
     VBoxManager vBoxManager = new VBoxManager();
+    protected final Log _logger = LogFactory.getLog(this.getClass());
 
     @GetMapping({"", "/", "/index"})
     public String index(Model model){
@@ -28,7 +32,17 @@ public class IndexController {
     }
 
     @GetMapping("/about")
-    public String about(Model model){
+    public String about(Model model, Authentication authentication){
+
+        _logger.info("######################################");
+
+        if(authentication != null){
+            _logger.info("Hola usuario ".concat(authentication.getName()).concat("con rol: ".concat(authentication.getAuthorities().toString())));
+        }else{
+            _logger.info("tontooooooooooooo");
+        }
+
+
         model.addAttribute("titulo", "About");
         return "about";
     }
