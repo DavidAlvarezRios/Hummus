@@ -10,25 +10,26 @@
     <div th:replace="~{header :: header}">Header</div>
     <div class="container">
         <div class="d-flex justify-content-center my-md-5">
-            <form action="#" method="post">
+            <form th:action="@{/login}" method="post">
                 <div>
                     <label for="username" class="form-label">Username</label>
                     <div>
-                        <input class="form-control" type="text" id="username" />
+                        <input class="form-control" name="username" type="text" id="username"
+                            placeholder="Username"/>
                     </div>
                 </div>
 
                 <div>
                     <label for="password" class="form-label">Password</label>
                     <div>
-                        <input class="form-control" type="password" id="password" />
+                        <input class="form-control" name="password" type="password" id="password"
+                            placeholder="password"/>
                     </div>
                 </div>
                 <div>
                     <input type="submit" class="btn btn-lg btn-primary btn-block"
                            value="Sign In" />
                 </div>
-
             </form>
         </div>
     </div>

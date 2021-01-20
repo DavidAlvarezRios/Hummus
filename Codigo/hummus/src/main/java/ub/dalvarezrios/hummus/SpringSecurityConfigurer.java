@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ub.dalvarezrios.hummus.auth.handler.LoginSuccessHandler;
 
 import javax.sql.DataSource;
 
@@ -26,6 +27,9 @@ public class SpringSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -48,6 +52,8 @@ public class SpringSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/", "/index", "/register", "/about", "/css/**", "/js/**").permitAll()
                 .and()
                 .formLogin()
+                    .loginPage("/login")
+                    .successHandler(loginSuccessHandler)
                     .defaultSuccessUrl("/about")
                     .permitAll()
                 .and()
