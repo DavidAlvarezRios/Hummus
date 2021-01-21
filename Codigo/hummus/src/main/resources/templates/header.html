@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
@@ -35,9 +36,17 @@
                             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                         </li>
                     </ul>
-                    <form class="d-flex" id="formLogout" th:action="@{/logout}" method="post">
-                        <button class="btn btn-outline-success" onclick="document.getElementById('formLogout').submit();" type="submit">Log out</button>
-                    </form>
+                    <div sec:authorize="isAuthenticated()">
+                        <form class="d-flex" id="formLogout" th:action="@{/logout}" method="post">
+                            <button class="btn btn-outline-success" onclick="document.getElementById('formLogout').submit();" type="submit">Log out</button>
+                        </form>
+                    </div>
+                    <div sec:authorize="!isAuthenticated()">
+                        <ul class="d-inline-flex list-inline mx">
+                            <li><a class="btn btn-outline-success mx-2" th:href="@{/login}">Login</a></li>
+                            <li><a class="btn btn-outline-success" th:href="@{/register}">Register</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>

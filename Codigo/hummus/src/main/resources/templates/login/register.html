@@ -15,21 +15,24 @@
                 <div>
                     <label for="username" class="form-label">Username</label>
                     <div>
-                        <input class="form-control" type="text" th:field="*{username}" id="username" />
+                        <input class="form-control" type="text" th:field="*{username}" id="username" th:errorclass="'form-control alert-danger'" />
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}" ></small>
                     </div>
                 </div>
 
                 <div>
                     <label for="email" class="form-label" >Email</label>
                     <div>
-                        <input class="form-control" type="text" th:field="*{email}" id="email" />
+                        <input class="form-control" type="text" th:field="*{email}" id="email" th:errorclass="'form-control alert-danger'" />
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
                     </div>
                 </div>
 
                 <div>
                     <label for="password" class="form-label">Password</label>
                     <div>
-                        <input class="form-control" type="password" th:field="*{password}" id="password" />
+                        <input class="form-control" type="password" th:field="*{password}" id="password" th:errorclass="'form-control alert-danger'" />
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" ></small>
                     </div>
                 </div>
                 <div>
