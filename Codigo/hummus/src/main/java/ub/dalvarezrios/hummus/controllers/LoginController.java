@@ -1,6 +1,8 @@
 package ub.dalvarezrios.hummus.controllers;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import ub.dalvarezrios.hummus.models.entity.Role;
 import ub.dalvarezrios.hummus.models.entity.User;
 import ub.dalvarezrios.hummus.models.service.IRoleService;
 import ub.dalvarezrios.hummus.models.service.IUserService;
+import ub.dalvarezrios.hummus.models.service.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -30,6 +33,7 @@ public class LoginController {
     private IRoleService roleService;
     @Autowired
     private PasswordEncoder encoder;
+    protected final Log _logger = LogFactory.getLog(this.getClass());
 
     @GetMapping("/login")
     public String login(@RequestParam(value="error", required = false) String error,

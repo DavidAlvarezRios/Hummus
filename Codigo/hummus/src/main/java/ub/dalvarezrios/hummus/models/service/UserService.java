@@ -1,5 +1,7 @@
 package ub.dalvarezrios.hummus.models.service;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ub.dalvarezrios.hummus.models.dao.IUserDao;
@@ -9,6 +11,8 @@ import java.util.List;
 
 @Repository
 public class UserService implements IUserService{
+
+    protected final Log _logger = LogFactory.getLog(this.getClass());
 
     @Autowired
     private IUserDao userDao;
@@ -31,5 +35,15 @@ public class UserService implements IUserService{
     @Override
     public void delete(Long id) {
         userDao.deleteById(id);
+    }
+
+    @Override
+    public boolean existsUsername(String username) {
+        return !userDao.findByUsername(username).isEmpty();
+    }
+
+    @Override
+    public boolean existsEmail(String email) {
+        return !userDao.findByEmail(email).isEmpty();
     }
 }

@@ -10,5 +10,7 @@ public interface IUserService {
     public void save(User user);
     public User findOne(Long id);
     public void delete(Long id);
+    public boolean existsUsername(String username);
+    public boolean existsEmail(String email);
 
 }
