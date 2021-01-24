@@ -1,9 +1,6 @@
 package ub.dalvarezrios.hummus.models.entity;
 
-import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
-import ub.dalvarezrios.hummus.validation.EmailConstraint;
-import ub.dalvarezrios.hummus.validation.UsernameConstraint;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -21,12 +18,10 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotEmpty
-    @UsernameConstraint
     @Column(unique=true)
     private String username;
     @NotEmpty
     @Email
-    @EmailConstraint
     @Column(unique=true)
     private String email;
     @Size(min=8)

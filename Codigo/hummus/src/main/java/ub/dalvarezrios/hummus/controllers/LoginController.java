@@ -8,18 +8,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ub.dalvarezrios.hummus.models.dao.IUserDao;
 import ub.dalvarezrios.hummus.models.entity.Role;
 import ub.dalvarezrios.hummus.models.entity.User;
 import ub.dalvarezrios.hummus.models.service.IRoleService;
 import ub.dalvarezrios.hummus.models.service.IUserService;
-import ub.dalvarezrios.hummus.models.service.UserService;
+import ub.dalvarezrios.hummus.validation.EmailValidator;
+import ub.dalvarezrios.hummus.validation.UsernameValidator;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -33,6 +32,17 @@ public class LoginController {
     private IRoleService roleService;
     @Autowired
     private PasswordEncoder encoder;
+
+    @Autowired
+    private UsernameValidator usernameValidator;
+    @Autowired
+    private EmailValidator emailValidator;
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder){
+        binder.addValidators(usernameValidator, emailValidator);
+    }
+
     protected final Log _logger = LogFactory.getLog(this.getClass());
 
     @GetMapping("/login")
