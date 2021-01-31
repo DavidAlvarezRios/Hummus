@@ -2,6 +2,7 @@ package ub.dalvarezrios.hummus.controllers;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,28 +32,18 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("/about")
-    public String about(Model model, Authentication authentication){
-
-        _logger.info("######################################");
-
-        if(authentication != null){
-            _logger.info("Hola usuario ".concat(authentication.getName()).concat("con rol: ".concat(authentication.getAuthorities().toString())));
-        }else{
-            _logger.info("tontooooooooooooo");
-        }
-
-
-        model.addAttribute("titulo", "About");
-        return "about";
-    }
-
     @GetMapping("/mv")
     public String openVM(@RequestParam String machineName, Model model){
         vBoxManager.launchMachine(machineName, LaunchMode.headless);
         model.addAttribute("titulo", machineName);
-        return "display";
+        return "vm/display";
     }
 
+    @GetMapping("/about")
+    public String about(Model model, Authentication authentication){
+
+        model.addAttribute("titulo", "About");
+        return "about";
+    }
 
 }

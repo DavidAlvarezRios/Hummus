@@ -88,6 +88,7 @@ public class VBoxManager {
         }
         IMachine machine = vbox.findMachine(machineName);
         ISession session = boxManager.getSessionObject();
+        //System.out.println(session.getState().name());
         try {
             IProgress progress = machine.launchVMProcess(session, mode.name(), null);
             wait(progress);

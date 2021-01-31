@@ -1,0 +1,21 @@
+Workflow Usuario crea maquina virtual:
+
+1. El usuario quiere solucionar un problema / enfrentarse a un problema preestablecido
+2. Usuario clica sobre ese problema y se le abre un formulario.
+
+formulario:
+    - Nombre? -> podria ponerle un nombre solo visible para el usuario. Nombre interno de la vm username_problema.
+(El usuario tendria una ventana donde puede ver las maquinas virtuales que tiene disponibles?)
+
+3. Se crea una máquina con la siguiente información
+    - nombre -> username_problema
+    - port -> uno que este libre en el sistema (Investigar como obtener puertos libres desde java)
+
+
+DEMO:
+
+    - Entro en la dirección localhost:8080/problems (por ejemplo)
+    - Dentro de esta página habria un listado de los distintos problemas. (¿separados por categoria?, buscador, )
+    - Al clicar en un problema, se crea una máquina virtual. (Clon de máquina ya existente? desde osv?)
+    - El usuario se conecta a la maquina virtual y puede utilizarla.
+

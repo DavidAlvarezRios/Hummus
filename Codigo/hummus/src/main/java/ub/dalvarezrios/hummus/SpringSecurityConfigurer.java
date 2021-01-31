@@ -1,9 +1,6 @@
 package ub.dalvarezrios.hummus;
 
-import org.hibernate.validator.HibernateValidator;
-import org.hibernate.validator.internal.engine.ValidatorImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -11,13 +8,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory;
 import ub.dalvarezrios.hummus.auth.handler.LoginSuccessHandler;
+import ub.dalvarezrios.hummus.models.VBoxManager;
 
 import javax.sql.DataSource;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 
 @Configuration
 @EnableWebSecurity
@@ -50,7 +44,7 @@ public class SpringSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/", "/index", "/register", "/about", "/css/**", "/js/**").permitAll()
+        http.authorizeRequests().antMatchers("/", "/index", "/register", "/about", "/css/**", "/js/**", "/mv").permitAll()
                 .and()
                 .formLogin()
                     .loginPage("/login")
