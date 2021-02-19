@@ -5,9 +5,7 @@
     <title th:text="${titulo}"></title>
 </head>
 <body>
-    <!-- Guacamole -->
-    <script type="text/javascript"
-        src="guacamole-common-js/all.min.js"></script>
+
 
     <table th:if="${not maquinas.isEmpty()}">
         <tr th:each="maquina: ${maquinas}">

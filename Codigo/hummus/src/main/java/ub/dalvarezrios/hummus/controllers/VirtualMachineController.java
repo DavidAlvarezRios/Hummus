@@ -20,5 +20,12 @@ public class VirtualMachineController {
         return "vm/create_vm_page";
     }
 
+    @GetMapping("/mv")
+    public String openVM(@RequestParam String machineName, Model model){
+        //vBoxManager.launchMachine(machineName, LaunchMode.headless);
+        model.addAttribute("titulo", machineName);
+        return "vm/display";
+    }
+
 
 }

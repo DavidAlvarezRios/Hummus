@@ -32,13 +32,6 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("/mv")
-    public String openVM(@RequestParam String machineName, Model model){
-        vBoxManager.launchMachine(machineName, LaunchMode.headless);
-        model.addAttribute("titulo", machineName);
-        return "vm/display";
-    }
-
     @GetMapping("/about")
     public String about(Model model, Authentication authentication){
 
