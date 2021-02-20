@@ -46,4 +46,8 @@ public class UserService implements IUserService{
     public boolean existsEmail(String email) {
         return !userDao.findByEmail(email).isEmpty();
     }
+
+    public User findByUsername(String username){
+        return userDao.findByUsername(username).get(0);
+    }
 }

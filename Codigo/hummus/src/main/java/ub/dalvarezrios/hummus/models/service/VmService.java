@@ -1,11 +1,13 @@
 package ub.dalvarezrios.hummus.models.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ub.dalvarezrios.hummus.models.dao.IVmDao;
 import ub.dalvarezrios.hummus.models.entity.VirtualMachine;
 
 import java.util.List;
 
+@Repository
 public class VmService implements IVmService{
 
     @Autowired
