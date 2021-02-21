@@ -26,14 +26,12 @@ public class IndexController {
     @GetMapping({"", "/", "/index"})
     public String index(Model model){
         List<IMachine> maquinas = vBoxManager.getMachines(MachineState.PoweredOff);
-        IMachine machine = vBoxManager.findMachine("test");
-        //List<String> properties = machine.getVRDEServer().getVRDEProperties();
 
-        //machine.getVRDEServer().setVRDEProperty("TCP/Ports", "3391");
+        IMachine newMachine = vBoxManager.cloneMachine("test", "test2");
 
         model.addAttribute("titulo", "Test");
-        //model.addAttribute("properties", properties);
         model.addAttribute("maquinas", maquinas);
+        model.addAttribute("new_machine", newMachine);
 
         return "index";
     }

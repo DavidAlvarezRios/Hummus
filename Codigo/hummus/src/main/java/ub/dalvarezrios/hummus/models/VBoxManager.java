@@ -312,4 +312,53 @@ public class VBoxManager {
         }
         return false;
     }
+
+    public void setPortVRDE(String nameMachine, String port){
+        IMachine machine = findMachine(nameMachine);
+        ISession session = boxManager.getSessionObject();
+        machine.lockMachine(session, LockType.Write);
+        IMachine mutable = session.getMachine();
+        mutable.getVRDEServer().setVRDEProperty("TCP/Ports", port);
+        mutable.saveSettings();
+        session.unlockMachine();
+
+    }
+
+    public IMachine cloneMachine(String nameOldMachine, String nameNewMachine){
+        IMachine oldMachine = findMachine(nameOldMachine);
+        IMachine newMachine = vbox.createMachine(null, nameNewMachine, null, oldMachine.getOSTypeId(), null);
+
+        newMachine.saveSettings();
+        vbox.registerMachine(newMachine);
+
+        ISession session = boxManager.getSessionObject();
+        newMachine.lockMachine(session, LockType.Write);
+        IMachine mutable = session.getMachine();
+
+        List<CloneOptions> options = new ArrayList<CloneOptions>(); //clone options
+        options.add(CloneOptions.KeepDiskNames); //just keep the disk name
+        IProgress clone_progress = oldMachine.cloneTo(mutable, CloneMode.AllStates, options); //start the clone process
+        progressBar(clone_progress); //this function keeps track of the clone percent
+
+        mutable.saveSettings();
+        session.unlockMachine();
+
+        return newMachine;
+    }
+
+    private boolean progressBar(IProgress p)
+    {
+        while (!p.getCompleted())
+        {
+            System.out.println(p.getPercent() + " . ");
+        }
+        if(p.getCompleted()){
+            System.out.println(p.getResultCode());
+            IVirtualBoxErrorInfo info = p.getErrorInfo();
+            if(info!=null)
+                System.out.println(info.getText());
+        }
+        return true;
+    }
+
 }
