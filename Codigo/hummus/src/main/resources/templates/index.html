@@ -6,7 +6,6 @@
 </head>
 <body>
 
-
     <table th:if="${not maquinas.isEmpty()}">
         <tr th:each="maquina: ${maquinas}">
             <a th:href="@{/mv(machineName=${maquina.getName()})}" th:text="${maquina.getName()}"></a><br>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -12,12 +12,14 @@
     <!-- Display -->
     <div id="display"></div>
     <!-- Init -->
-    <script type="text/javascript"> /* <![CDATA[ */
+    <script type="text/javascript" th:inline="javascript"> /* <![CDATA[ */
 
     // Get display div from document
     var display = document.getElementById("display");
 
     // Instantiate client, using an HTTP tunnel for communications.
+    var port = /*[[${port}]]*/ "";
+    console.log(port);
     var guac = new Guacamole.Client(
         new Guacamole.HTTPTunnel("tunnel")
     );
@@ -37,7 +39,6 @@
     window.onunload = function() {
         guac.disconnect();
     }
-
 
     // Mouse
     var mouse = new Guacamole.Mouse(guac.getDisplay().getElement());

@@ -20,6 +20,10 @@ public class VBoxManager {
         vbox = boxManager.getVBox();
     }
 
+    public IMachine findMachine(String name){
+        return vbox.findMachine(name);
+    }
+
     public String getVBoxVersion() {
         return vbox.getVersion();
     }

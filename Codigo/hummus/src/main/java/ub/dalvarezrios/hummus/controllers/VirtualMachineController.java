@@ -1,5 +1,7 @@
 package ub.dalvarezrios.hummus.controllers;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import ub.dalvarezrios.hummus.models.entity.VirtualMachine;
 import ub.dalvarezrios.hummus.models.service.IUserService;
 import ub.dalvarezrios.hummus.models.service.IVmService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 @Controller
@@ -26,6 +29,8 @@ public class VirtualMachineController {
     IUserService userService;
     @Autowired
     PortScanner ps;
+
+    protected final Log _logger = LogFactory.getLog(this.getClass());
 
     @GetMapping("/create_vm")
     public String create_vm_page(Model model, Principal principal){
@@ -62,10 +67,19 @@ public class VirtualMachineController {
     }
 
     @GetMapping("/mv")
-    public String openVM(@RequestParam String machineName, Model model){
+    public String openVM(@RequestParam String machineName, Model model, HttpServletRequest request){
         //vBoxManager.launchMachine(machineName, LaunchMode.headless);
         model.addAttribute("titulo", machineName);
-        return "vm/display";
+        //String port = vmService.findByMachineName(machineName);
+        if(machineName.equals("test")){
+            _logger.info("HEYHEYEHYEYEHEYE");
+            request.setAttribute("port", "3389");
+        }else{
+            _logger.info("OYOYOYOYYOYOYO");
+            request.setAttribute("port", "3390");
+        }
+        request.setAttribute("machineName", machineName);
+        return "forward:/display";
     }
 
 
