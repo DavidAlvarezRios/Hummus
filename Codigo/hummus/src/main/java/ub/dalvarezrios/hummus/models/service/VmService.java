@@ -37,4 +37,9 @@ public class VmService implements IVmService{
     public List<VirtualMachine> findAllVmByUserID(Long user_id) {
         return iVmDao.findByUserId(user_id);
     }
+
+    @Override
+    public VirtualMachine findByMachineName(String name){
+        return iVmDao.findByVmName(name).get(0);
+    }
 }

@@ -8,5 +8,6 @@ import java.util.List;
 public interface IVmDao extends CrudRepository<VirtualMachine, Long> {
 
     List<VirtualMachine> findByUserId(Long user_id);
+    List<VirtualMachine> findByVmName(String vm_name);
 
 }

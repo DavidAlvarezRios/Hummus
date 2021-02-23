@@ -18,6 +18,7 @@ import ub.dalvarezrios.hummus.models.service.IVmService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class VirtualMachineController {
@@ -70,16 +71,30 @@ public class VirtualMachineController {
     public String openVM(@RequestParam String machineName, Model model, HttpServletRequest request){
         //vBoxManager.launchMachine(machineName, LaunchMode.headless);
         model.addAttribute("titulo", machineName);
-        //String port = vmService.findByMachineName(machineName);
-        if(machineName.equals("test")){
-            _logger.info("HEYHEYEHYEYEHEYE");
-            request.setAttribute("port", "3389");
-        }else{
-            _logger.info("OYOYOYOYYOYOYO");
-            request.setAttribute("port", "3390");
-        }
+        String port = vmService.findByMachineName(machineName).getPort();
+        request.setAttribute("port", port);
+
         request.setAttribute("machineName", machineName);
-        return "forward:/display";
+        return "forward:/display"; //This could be done with a FlashMap and a redirect too
+    }
+
+    @GetMapping("/my_vms")
+    public String myVms(Model model, Principal principal){
+
+        if(principal == null){
+            return "redirect:/login";
+        }
+
+        String username = principal.getName();
+
+        User actualUser = userService.findByUsername(username);
+
+        List<VirtualMachine> userMachines = vmService.findAllVmByUserID(actualUser.getId());
+
+        model.addAttribute("username", username);
+        model.addAttribute("machines", userMachines);
+
+        return "vm/my_vms";
     }
 
 

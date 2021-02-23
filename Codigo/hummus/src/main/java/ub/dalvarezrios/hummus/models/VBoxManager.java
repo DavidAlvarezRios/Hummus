@@ -336,9 +336,9 @@ public class VBoxManager {
         IMachine mutable = session.getMachine();
 
         List<CloneOptions> options = new ArrayList<CloneOptions>(); //clone options
-        options.add(CloneOptions.KeepDiskNames); //just keep the disk name
-        IProgress clone_progress = oldMachine.cloneTo(mutable, CloneMode.AllStates, options); //start the clone process
-        progressBar(clone_progress); //this function keeps track of the clone percent
+        //options.add(CloneOptions.KeepDiskNames, CloneOptions.); //just keep the disk name
+        IProgress clone_progress = oldMachine.cloneTo(mutable, CloneMode.MachineState, options); //start the clone process
+        //progressBar(clone_progress); //this function keeps track of the clone percent
 
         mutable.saveSettings();
         session.unlockMachine();
