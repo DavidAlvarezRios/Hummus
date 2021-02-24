@@ -12,8 +12,8 @@ public class VirtualMachine {
     private Long id;
 
     @NotEmpty
-    @Column(unique=true)
-    private String vm_name;
+    @Column(unique=true, name="vm_name")
+    private String vmName;
 
     @NotEmpty
     @Column(unique=true)
@@ -28,7 +28,7 @@ public class VirtualMachine {
     }
 
     public VirtualMachine(String vm_name, String port, User user){
-        this.vm_name = vm_name;
+        this.vmName = vm_name;
         this.port = port;
         this.user = user;
     }
@@ -42,11 +42,11 @@ public class VirtualMachine {
     }
 
     public String getVm_name() {
-        return vm_name;
+        return vmName;
     }
 
     public void setVm_name(String vm_name) {
-        this.vm_name = vm_name;
+        this.vmName = vm_name;
     }
 
     public String getPort() {

@@ -23,7 +23,7 @@ import java.util.List;
 @Controller
 public class VirtualMachineController {
 
-    //VBoxManager vBoxManager = new VBoxManager();
+    VBoxManager vBoxManager = new VBoxManager();
     @Autowired
     IVmService vmService;
     @Autowired
@@ -69,7 +69,7 @@ public class VirtualMachineController {
 
     @GetMapping("/mv")
     public String openVM(@RequestParam String machineName, Model model, HttpServletRequest request){
-        //vBoxManager.launchMachine(machineName, LaunchMode.headless);
+        vBoxManager.launchMachine(machineName, LaunchMode.headless);
         model.addAttribute("titulo", machineName);
         String port = vmService.findByMachineName(machineName).getPort();
         request.setAttribute("port", port);
