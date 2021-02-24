@@ -27,11 +27,11 @@ public class IndexController {
     public String index(Model model){
         List<IMachine> maquinas = vBoxManager.getMachines(MachineState.PoweredOff);
 
-        IMachine newMachine = vBoxManager.cloneMachine("test", "test2");
+        //IMachine newMachine = vBoxManager.cloneMachine("test", "test2");
 
         model.addAttribute("titulo", "Test");
         model.addAttribute("maquinas", maquinas);
-        model.addAttribute("new_machine", newMachine);
+        //model.addAttribute("new_machine", newMachine);
 
         return "index";
     }
