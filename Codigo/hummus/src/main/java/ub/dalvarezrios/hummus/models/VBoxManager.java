@@ -1,5 +1,7 @@
 package ub.dalvarezrios.hummus.models;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.virtualbox_6_1.*;
 
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ public class VBoxManager {
     private final VirtualBoxManager boxManager;
     private final IVirtualBox vbox;
     private IProgress progress;
+    protected final Log _logger = LogFactory.getLog(this.getClass());
 
     public VBoxManager() {
         boxManager = VirtualBoxManager.createInstance(null);
@@ -321,6 +324,30 @@ public class VBoxManager {
         mutable.getVRDEServer().setVRDEProperty("TCP/Ports", port);
         mutable.saveSettings();
         session.unlockMachine();
+
+    }
+
+    public void createInternalNetworkFromMachineNames(String networkName, List<String> machineNames, String username, String problem){
+
+        if(machineNames.size() < 2){
+            _logger.info("createInternalNetworkFromMachineNames: Not enough machines to create a network");
+        }
+
+        String name = "intnet".concat(username).concat(problem);
+
+        for(String machineName: machineNames){
+            IMachine machine = findMachine(machineName);
+            ISession session = boxManager.getSessionObject();
+            machine.lockMachine(session, LockType.Write);
+            IMachine mutable = session.getMachine();
+            INetworkAdapter networkAdapter = mutable.getNetworkAdapter(0L);
+            networkAdapter.setAttachmentType(NetworkAttachmentType.Internal);
+            networkAdapter.setInternalNetwork(name);
+            //networkAdapter.
+            mutable.saveSettings();
+            session.unlockMachine();
+        }
+
 
     }
 
