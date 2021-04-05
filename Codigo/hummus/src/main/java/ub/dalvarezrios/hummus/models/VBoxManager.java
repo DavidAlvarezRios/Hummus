@@ -327,28 +327,32 @@ public class VBoxManager {
 
     }
 
-    public void createInternalNetworkFromMachineNames(String networkName, List<String> machineNames, String username, String problem){
+    public boolean assignInternalNetworkFromMachineNames(String networkName, List<String> machineNames){
+
+        boolean fail = false;
 
         if(machineNames.size() < 2){
             _logger.info("createInternalNetworkFromMachineNames: Not enough machines to create a network");
         }
 
-        String name = "intnet".concat(username).concat(problem);
-
         for(String machineName: machineNames){
-            IMachine machine = findMachine(machineName);
-            ISession session = boxManager.getSessionObject();
-            machine.lockMachine(session, LockType.Write);
-            IMachine mutable = session.getMachine();
-            INetworkAdapter networkAdapter = mutable.getNetworkAdapter(0L);
-            networkAdapter.setAttachmentType(NetworkAttachmentType.Internal);
-            networkAdapter.setInternalNetwork(name);
-            //networkAdapter.
-            mutable.saveSettings();
-            session.unlockMachine();
+            if(machineExists(machineName)) {
+                IMachine machine = findMachine(machineName);
+                ISession session = boxManager.getSessionObject();
+                machine.lockMachine(session, LockType.Write);
+                IMachine mutable = session.getMachine();
+                INetworkAdapter networkAdapter = mutable.getNetworkAdapter(0L);
+                networkAdapter.setAttachmentType(NetworkAttachmentType.Internal);
+                networkAdapter.setInternalNetwork(networkName);
+                mutable.saveSettings();
+                session.unlockMachine();
+            }else {
+                fail = true;
+                break;
+            }
         }
 
-
+        return fail;
     }
 
     public IMachine cloneMachine(String nameOldMachine, String nameNewMachine){
