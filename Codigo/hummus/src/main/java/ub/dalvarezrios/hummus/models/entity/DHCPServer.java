@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
-@Table(name="dchp_server")
+@Table(name="dhcp_server")
 public class DHCPServer {
 
     @Id
@@ -19,15 +19,16 @@ public class DHCPServer {
     private String ip;
 
     @NotEmpty
+    private String netMask;
+
+    @NotEmpty
     private String lower_ip;
 
     @NotEmpty
     private String upper_ip;
 
-    @NotEmpty
     private boolean enabled;
 
-    @NotEmpty
     private boolean used;
 
     // GETTER AND SETTER
@@ -85,5 +86,13 @@ public class DHCPServer {
 
     public void setUsed(boolean used) {
         this.used = used;
+    }
+
+    public String getNetMask() {
+        return netMask;
+    }
+
+    public void setNetMask(String netMask) {
+        this.netMask = netMask;
     }
 }

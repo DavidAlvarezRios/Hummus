@@ -18,4 +18,18 @@ public class DHCPServerService implements IDHCPServerService {
         return (List<DHCPServer>) dhcpDao.findAll();
     }
 
+    @Override
+    public void save(DHCPServer dhcp) {
+        dhcpDao.save(dhcp);
+    }
+
+    @Override
+    public DHCPServer findOne(Long id) {
+        return dhcpDao.findById(id).orElse(null);
+    }
+
+    @Override
+    public void delete(Long id) {
+        dhcpDao.deleteById(id);
+    }
 }

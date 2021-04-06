@@ -7,5 +7,8 @@ import java.util.List;
 public interface IDHCPServerService {
 
     public List<DHCPServer> findall();
+    public void save(DHCPServer dhcp);
+    public DHCPServer findOne(Long id);
+    public void delete(Long id);
 
 }

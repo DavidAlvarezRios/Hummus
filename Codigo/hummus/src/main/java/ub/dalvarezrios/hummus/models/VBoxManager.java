@@ -3,6 +3,7 @@ package ub.dalvarezrios.hummus.models;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.virtualbox_6_1.*;
+import ub.dalvarezrios.hummus.models.entity.DHCPServer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -327,13 +328,51 @@ public class VBoxManager {
 
     }
 
-    public boolean assignInternalNetworkFromMachineNames(String networkName, List<String> machineNames){
+    public boolean existsDHCPServer(String name){
+
+        boolean exists = false;
+
+        IDHCPServer dhcpServer = null;
+        dhcpServer = vbox.findDHCPServerByNetworkName(name);
+
+        if(dhcpServer != null){
+            exists = true;
+        }
+
+        return exists;
+    }
+
+    public void createDHCPServer(String name, DHCPServer conf){
+
+        //boolean exists = existsDHCPServer(name);
+        boolean exists = false;
+        if(!exists){
+            IDHCPServer dhcpServer = vbox.createDHCPServer(name);
+            // IpAddress, networkMask, lowerIp, upperIp
+            dhcpServer.setConfiguration(conf.getIp(), conf.getNetMask(), conf.getLower_ip(), conf.getUpper_ip());
+            dhcpServer.setEnabled(true);
+            dhcpServer.start(name, String.valueOf(NetworkAttachmentType.Internal));
+        }
+
+    }
+
+    //public IDHCPServer deleteDHCPServer(String name){
+    public void deleteDHCPServer(String name){
+        boolean exists = existsDHCPServer(name);
+        if(exists){
+            vbox.removeDHCPServer(vbox.findDHCPServerByNetworkName(name));
+        }
+    }
+
+    public boolean assignInternalNetworkFromMachineNames(String networkName, List<String> machineNames, DHCPServer conf){
 
         boolean fail = false;
 
         if(machineNames.size() < 2){
             _logger.info("createInternalNetworkFromMachineNames: Not enough machines to create a network");
         }
+
+        createDHCPServer(networkName, conf);
 
         for(String machineName: machineNames){
             if(machineExists(machineName)) {
@@ -344,6 +383,7 @@ public class VBoxManager {
                 INetworkAdapter networkAdapter = mutable.getNetworkAdapter(0L);
                 networkAdapter.setAttachmentType(NetworkAttachmentType.Internal);
                 networkAdapter.setInternalNetwork(networkName);
+                networkAdapter.setPromiscModePolicy(NetworkAdapterPromiscModePolicy.AllowNetwork); // Same as Allow VMs
                 mutable.saveSettings();
                 session.unlockMachine();
             }else {
