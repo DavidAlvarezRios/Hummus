@@ -331,36 +331,37 @@ public class VBoxManager {
     public boolean existsDHCPServer(String name){
 
         boolean exists = false;
-
-        IDHCPServer dhcpServer = null;
-        dhcpServer = vbox.findDHCPServerByNetworkName(name);
-
-        if(dhcpServer != null){
-            exists = true;
+        for(IDHCPServer dhcp : vbox.getDHCPServers()){
+            if(dhcp.getNetworkName().equals(name)){
+                exists = true;
+                break;
+            }
         }
-
         return exists;
     }
 
-    public void createDHCPServer(String name, DHCPServer conf){
+    public IDHCPServer findDHCPServerByName(String name){
 
-        //boolean exists = existsDHCPServer(name);
-        boolean exists = false;
-        if(!exists){
-            IDHCPServer dhcpServer = vbox.createDHCPServer(name);
-            // IpAddress, networkMask, lowerIp, upperIp
-            dhcpServer.setConfiguration(conf.getIp(), conf.getNetMask(), conf.getLower_ip(), conf.getUpper_ip());
-            dhcpServer.setEnabled(true);
-            dhcpServer.start(name, String.valueOf(NetworkAttachmentType.Internal));
+        for(IDHCPServer dhcp : vbox.getDHCPServers()){
+            if(dhcp.getNetworkName().equals(name)){
+                return dhcp;
+            }
         }
-
+        return null;
     }
 
-    //public IDHCPServer deleteDHCPServer(String name){
+    public void createDHCPServer(String name, DHCPServer conf){
+        IDHCPServer dhcpServer = vbox.createDHCPServer(name);
+        // IpAddress, networkMask, lowerIp, upperIp
+        dhcpServer.setConfiguration(conf.getIp(), conf.getNetMask(), conf.getLower_ip(), conf.getUpper_ip());
+        dhcpServer.setEnabled(true);
+        dhcpServer.start(name, String.valueOf(NetworkAttachmentType.Internal));
+    }
+
     public void deleteDHCPServer(String name){
-        boolean exists = existsDHCPServer(name);
-        if(exists){
-            vbox.removeDHCPServer(vbox.findDHCPServerByNetworkName(name));
+        IDHCPServer toRemove = findDHCPServerByName(name);
+        if(toRemove != null){
+            vbox.removeDHCPServer(toRemove);
         }
     }
 
@@ -372,7 +373,11 @@ public class VBoxManager {
             _logger.info("createInternalNetworkFromMachineNames: Not enough machines to create a network");
         }
 
-        createDHCPServer(networkName, conf);
+        if(!existsDHCPServer(networkName)){
+            createDHCPServer(networkName, conf);
+        }else{
+            return true;
+        }
 
         for(String machineName: machineNames){
             if(machineExists(machineName)) {

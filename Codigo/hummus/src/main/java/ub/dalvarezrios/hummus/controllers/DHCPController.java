@@ -48,7 +48,6 @@ public class DHCPController {
         dhcp.setNetname("testlab3");
         dhcp.setUsed(false);
 
-        idhcpServerService.save(dhcp);
 
         List<VirtualMachine> vms = vmService.findAll();
         List<String> vm_names = new ArrayList<>();
@@ -57,13 +56,12 @@ public class DHCPController {
             vm_names.add(vm.getVm_name());
         }
 
-
         boolean fail = vBoxManager.assignInternalNetworkFromMachineNames(dhcp.getNetname(), vm_names, dhcp);
-        if(fail){
-            _logger.info("Not enough virtual machines");
+        if(!fail){
+            idhcpServerService.save(dhcp);
         }
 
-        return "redirect:about";
+        return "redirect:/about";
     }
 
 }
