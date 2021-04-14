@@ -24,6 +24,10 @@ public class VirtualMachine {
     private User user;
 
     @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="problem_id")
+    private Exercise exercise;
+
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="dhcp_id")
     private DHCPServer dhcpServer;
 
@@ -75,5 +79,13 @@ public class VirtualMachine {
 
     public void setDhcpServer(DHCPServer dhcpServer) {
         this.dhcpServer = dhcpServer;
+    }
+
+    public Exercise getExercise() {
+        return exercise;
+    }
+
+    public void setExercise(Exercise exercise) {
+        this.exercise = exercise;
     }
 }

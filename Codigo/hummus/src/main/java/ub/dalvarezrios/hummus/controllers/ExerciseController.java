@@ -9,7 +9,7 @@ public class ExerciseController {
 
     @GetMapping("/exercises")
     public String exercises(Model model){
-
+        model.addAttribute("titulo", "Ejercicios");
 
         return "exercises/exercises";
     }
