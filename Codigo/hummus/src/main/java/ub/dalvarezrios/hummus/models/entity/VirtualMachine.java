@@ -2,6 +2,7 @@ package ub.dalvarezrios.hummus.models.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.Date;
 
 @Entity
 @Table(name="virtual_machines")
@@ -24,12 +25,18 @@ public class VirtualMachine {
     private User user;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="problem_id")
+    @JoinColumn(name="exercise_id")
     private Exercise exercise;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="dhcp_id")
     private DHCPServer dhcpServer;
+
+    @Column(name="type")
+    private Integer type;
+
+    @Column(name="used")
+    private boolean used;
 
     public VirtualMachine(){
 
@@ -39,6 +46,11 @@ public class VirtualMachine {
         this.vmName = vm_name;
         this.port = port;
         this.user = user;
+    }
+
+    @PrePersist
+    public void prePersist(){
+        this.used = false;
     }
 
     public Long getId() {
@@ -87,5 +99,21 @@ public class VirtualMachine {
 
     public void setExercise(Exercise exercise) {
         this.exercise = exercise;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 }

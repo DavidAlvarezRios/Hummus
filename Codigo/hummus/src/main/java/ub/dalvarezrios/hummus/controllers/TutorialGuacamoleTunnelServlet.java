@@ -54,7 +54,6 @@ public class TutorialGuacamoleTunnelServlet extends GuacamoleHTTPTunnelServlet {
         config.setParameter("hostname", "localhost");
         config.setParameter("port", this.port);
         config.setParameter("password", "potato");
-
         // Connect to guacd - everything is hard-coded here.
         GuacamoleSocket socket = new ConfiguredGuacamoleSocket(
                 new InetGuacamoleSocket("localhost", 4822),

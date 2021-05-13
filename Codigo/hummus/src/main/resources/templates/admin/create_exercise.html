@@ -1,10 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${titulo}"></title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
 </head>
 <body>
+<div th:replace="~{header :: header}">Header</div>
+<div class="container">
+    <div class="d-flex justify-content-center my-md-5">
+        <form th:action="@{/admin/create_exercise}" th:object="${exercise}" method="post">
 
+            <div>
+                <label for="name" class="form-label">Name</label>
+                <div>
+                    <input class="form-control" type="text" th:field="*{name}" id="name" th:errorclass="'form-control alert-danger'" />
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" ></small>
+                </div>
+            </div>
+
+            <div>
+                <label for="numVms" class="form-label" >Num of Vms</label>
+                <div>
+                    <input class="form-control" type="text" th:field="*{numVms}" id="numVms" th:errorclass="'form-control alert-danger'" />
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('numVms')}" th:errors="*{numVms}"></small>
+                </div>
+            </div>
+
+            <div>
+                <input class="btn-primary" type="submit" value="Create Exercise" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
 </body>
 </html>

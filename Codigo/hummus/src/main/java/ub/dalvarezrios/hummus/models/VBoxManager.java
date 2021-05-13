@@ -103,7 +103,7 @@ public class VBoxManager {
         } finally {
             session.unlockMachine();
         }
-        //TODO add a timeout
+
         try {
             String ipv4 = null;
             do {
@@ -341,7 +341,6 @@ public class VBoxManager {
     }
 
     public IDHCPServer findDHCPServerByName(String name){
-
         for(IDHCPServer dhcp : vbox.getDHCPServers()){
             if(dhcp.getNetworkName().equals(name)){
                 return dhcp;
@@ -371,13 +370,15 @@ public class VBoxManager {
 
         if(machineNames.size() < 2){
             _logger.info("createInternalNetworkFromMachineNames: Not enough machines to create a network");
+            return fail;
         }
 
-        if(!existsDHCPServer(networkName)){
-            createDHCPServer(networkName, conf);
-        }else{
-            return true;
+        if(existsDHCPServer(networkName)){
+            deleteDHCPServer(networkName);
         }
+
+        createDHCPServer(networkName, conf);
+
 
         for(String machineName: machineNames){
             if(machineExists(machineName)) {

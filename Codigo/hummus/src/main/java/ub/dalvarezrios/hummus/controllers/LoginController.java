@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ub.dalvarezrios.hummus.models.entity.Exercise;
 import ub.dalvarezrios.hummus.models.entity.Role;
 import ub.dalvarezrios.hummus.models.entity.User;
+import ub.dalvarezrios.hummus.models.service.IExerciseService;
 import ub.dalvarezrios.hummus.models.service.IRoleService;
 import ub.dalvarezrios.hummus.models.service.IUserService;
 import ub.dalvarezrios.hummus.validation.EmailValidator;
@@ -22,6 +24,7 @@ import ub.dalvarezrios.hummus.validation.UsernameValidator;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class LoginController {
@@ -30,6 +33,8 @@ public class LoginController {
     private IUserService userService;
     @Autowired
     private IRoleService roleService;
+    @Autowired
+    private IExerciseService exerciseService;
     @Autowired
     private PasswordEncoder encoder;
 
@@ -85,6 +90,8 @@ public class LoginController {
 
         user.setEnabled(true);
         user.setPassword(encoder.encode(user.getPassword()));
+/*        List<Exercise> exerciseList = exerciseService.findAll();
+        user.setExercises(exerciseList);*/
         Role role = new Role(user, "ROLE_USER");
         userService.save(user);
         roleService.save(role);

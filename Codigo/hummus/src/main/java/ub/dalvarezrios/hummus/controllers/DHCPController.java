@@ -58,7 +58,7 @@ public class DHCPController {
 
         boolean fail = vBoxManager.assignInternalNetworkFromMachineNames(dhcp.getNetname(), vm_names, dhcp);
         if(!fail){
-            idhcpServerService.save(dhcp);
+            //idhcpServerService.save(dhcp);
         }
 
         return "redirect:/about";

@@ -95,4 +95,13 @@ public class DHCPServer {
     public void setNetMask(String netMask) {
         this.netMask = netMask;
     }
+
+    public void autoconfigure(String name){
+        this.setNetname(name);
+        this.setUsed(true);
+        this.setIp("10.0.0.1");
+        this.setNetMask("255.255.255.0");
+        this.setLower_ip("10.0.0.2");
+        this.setUpper_ip("10.0.0.12");
+    }
 }

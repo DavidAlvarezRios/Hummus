@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${titulo}"></title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
 </head>
 <body>
+    <table th:if="${not exercices.isEmpty()}">
+        <tr th:each="exercise: ${exercices}">
+            <a th:href="@{exercise/${exercise.id}}"></a>
+        </tr>
+    </table>
 
 </body>
 </html>

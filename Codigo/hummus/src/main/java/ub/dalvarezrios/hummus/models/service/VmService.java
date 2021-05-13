@@ -3,6 +3,7 @@ package ub.dalvarezrios.hummus.models.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ub.dalvarezrios.hummus.models.dao.IVmDao;
+import ub.dalvarezrios.hummus.models.entity.Exercise;
 import ub.dalvarezrios.hummus.models.entity.VirtualMachine;
 
 import java.util.List;
@@ -41,5 +42,13 @@ public class VmService implements IVmService{
     @Override
     public VirtualMachine findByMachineName(String name){
         return iVmDao.findByVmName(name).get(0);
+    }
+    @Override
+    public List<VirtualMachine> findVMsByExercise(Long exerciseId) {
+        return iVmDao.findByExerciseAndUsedFalse(exerciseId);
+    }
+
+    public List<VirtualMachine> findVMsByExercise(Exercise exercise){
+        return iVmDao.findByExerciseAndUsedFalse(exercise);
     }
 }

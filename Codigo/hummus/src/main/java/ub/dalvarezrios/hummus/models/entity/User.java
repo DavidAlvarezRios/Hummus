@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -26,6 +27,14 @@ public class User implements Serializable {
     private String email;
     @Size(min=8)
     private String password;
+
+/*    @JoinTable(
+            name="exercise_user_rel",
+            joinColumns = @JoinColumn(name="fk_user", nullable = false),
+            inverseJoinColumns = @JoinColumn(name="fk_exercise", nullable = false)
+    )
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Exercise> exercises;*/
 
     @Column(name="create_at")
     @Temporal(TemporalType.DATE)
@@ -71,6 +80,14 @@ public class User implements Serializable {
         this.password = password;
     }
 
+/*    public List<Exercise> getExercises() {
+        return exercises;
+    }
+
+    public void setExercises(List<Exercise> exercises) {
+        this.exercises = exercises;
+    }*/
+
     public Date getCreateAt() {
         return createAt;
     }
@@ -86,4 +103,5 @@ public class User implements Serializable {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
 }

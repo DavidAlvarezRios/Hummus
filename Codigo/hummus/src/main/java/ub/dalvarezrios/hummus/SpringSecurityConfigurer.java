@@ -66,6 +66,8 @@ public class SpringSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests().antMatchers("/mv", "/tunnel?write**", "/tunnel?read**", "/tunnel?connect**").hasAnyRole("USER", "ADMIN")
                 .and()
+                    .authorizeRequests().antMatchers("/admin/","/admin/**").hasRole("ADMIN")
+                .and()
                     .csrf()
                         .requireCsrfProtectionMatcher(new RequestMatcher() {
                             private final Pattern allowedMethods = Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$");

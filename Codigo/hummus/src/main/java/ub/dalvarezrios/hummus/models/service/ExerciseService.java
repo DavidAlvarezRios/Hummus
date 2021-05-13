@@ -4,11 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ub.dalvarezrios.hummus.models.dao.IExerciseDao;
 import ub.dalvarezrios.hummus.models.entity.Exercise;
+import ub.dalvarezrios.hummus.models.entity.User;
 
 import java.util.List;
 
 @Repository
-public class ExerciseService implements IExerciseServer{
+public class ExerciseService implements IExerciseService {
 
     @Autowired
     IExerciseDao exerciseDao;
@@ -36,5 +37,10 @@ public class ExerciseService implements IExerciseServer{
     @Override
     public Exercise findByName(String name) {
         return exerciseDao.findByName(name).get(0);
+    }
+
+    @Override
+    public Exercise findAllByUser(User user) {
+        return null;
     }
 }

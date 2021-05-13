@@ -73,7 +73,6 @@ public class VirtualMachineController {
         model.addAttribute("titulo", machineName);
         String port = vmService.findByMachineName(machineName).getPort();
         request.setAttribute("port", port);
-
         request.setAttribute("machineName", machineName);
         return "forward:/display"; //This could be done with a FlashMap and a redirect too
     }

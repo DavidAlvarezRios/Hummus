@@ -1,6 +1,7 @@
 package ub.dalvarezrios.hummus.models.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class Exercise {
     private Long id;
     @NotEmpty
     private String name;
-    @NotEmpty
+    @Min(value=1)
     @Column(name = "num_vms")
     private int numVms;
 
