@@ -36,7 +36,7 @@ public class ExerciseController {
 
     protected final Log _logger = LogFactory.getLog(this.getClass());
 
-    @GetMapping("/")
+    @GetMapping("")
     public String exercises(Model model){
         _logger.info("Hola he entrado aqui");
         List<Exercise> exercises = exerciseService.findAll();
@@ -71,7 +71,6 @@ public class ExerciseController {
         String exerciseName = actualExercise.getName();
         int numVms = actualExercise.getNumVms();
         List<VirtualMachine> exerciseVms = new ArrayList<>();
-        //List<VirtualMachine> vms = vmService.findVMsByExercise(exerciseId);
         List<VirtualMachine> vms = vmService.findVMsByExercise(actualExercise);
 
         for(int i = 0; i < numVms; i++){

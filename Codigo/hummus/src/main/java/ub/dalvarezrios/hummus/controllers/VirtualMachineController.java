@@ -46,16 +46,8 @@ public class VirtualMachineController {
         User user = userService.findByUsername(username);
 
         // Search for a port
-        String port = "";
-        for(int i = 1024; i < 65665; i++){
-            String port_str = Integer.toString(i);
-            if(!ps.isPortInDB(port_str)){
-                if(!ps.isPortInUse("localhost", i)){
-                    port = port_str;
-                    break;
-                }
-            }
-        }
+        String port = ps.getAvailablePort();
+
         if(port.equals("")){
             return "redirect:/about";
         }
@@ -74,7 +66,7 @@ public class VirtualMachineController {
         String port = vmService.findByMachineName(machineName).getPort();
         request.setAttribute("port", port);
         request.setAttribute("machineName", machineName);
-        return "forward:/display"; //This could be done with a FlashMap and a redirect too
+        return "forward:/display";
     }
 
     @GetMapping("/my_vms")

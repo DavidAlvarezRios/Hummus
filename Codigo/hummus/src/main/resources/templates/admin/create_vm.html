@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titulo}"></title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+</head>
+<body>
+<div th:replace="~{header :: header}">Header</div>
+<div class="container">
+    <div class="d-flex justify-content-center my-md-5">
+        <form th:action="@{/admin/create_vm}" th:object="${vm}" method="post">
+
+            <div>
+                <label for="vm_name" class="form-label">Name</label>
+                <div>
+                    <input class="form-control" type="text" th:field="*{vm_name}" id="vm_name" th:errorclass="'form-control alert-danger'" />
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('vm_name')}" th:errors="*{vm_name}" ></small>
+                </div>
+            </div>
+
+            <div>
+                <label for="exercise" class="form-label" >Num of Vms</label>
+                <div>
+                    <input class="form-control" type="text" th:field="*{exercise}" id="exercise" th:errorclass="'form-control alert-danger'" />
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('exercise')}" th:errors="*{exercise}"></small>
+                </div>
+            </div>
+
+            <div>
+                <label for="type" class="form-label" >Num of Vms</label>
+                <div>
+                    <input class="form-control" type="text" th:field="*{type}" id="type" th:errorclass="'form-control alert-danger'" />
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></small>
+                </div>
+            </div>
+
+            <div>
+                <input class="btn-primary" type="submit" value="Create Exercise" />
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>

@@ -41,7 +41,11 @@ public class VmService implements IVmService{
 
     @Override
     public VirtualMachine findByMachineName(String name){
-        return iVmDao.findByVmName(name).get(0);
+        List<VirtualMachine> result = iVmDao.findByVmName(name);
+        if(result.isEmpty()){
+            return null;
+        }
+        return result.get(0);
     }
     @Override
     public List<VirtualMachine> findVMsByExercise(Long exerciseId) {

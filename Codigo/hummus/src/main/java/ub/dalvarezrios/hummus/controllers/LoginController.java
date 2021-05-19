@@ -90,8 +90,6 @@ public class LoginController {
 
         user.setEnabled(true);
         user.setPassword(encoder.encode(user.getPassword()));
-/*        List<Exercise> exerciseList = exerciseService.findAll();
-        user.setExercises(exerciseList);*/
         Role role = new Role(user, "ROLE_USER");
         userService.save(user);
         roleService.save(role);

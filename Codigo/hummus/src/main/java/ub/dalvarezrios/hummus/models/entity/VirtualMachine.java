@@ -16,7 +16,6 @@ public class VirtualMachine {
     @Column(unique=true, name="vm_name")
     private String vmName;
 
-    @NotEmpty
     @Column(unique=true)
     private String port;
 

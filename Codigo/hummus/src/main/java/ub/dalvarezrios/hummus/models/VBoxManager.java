@@ -282,7 +282,7 @@ public class VBoxManager {
         }
     }
 
-    private boolean machineExists(String machineName) {
+    public boolean machineExists(String machineName) {
         ///VBOX_E_OBJECT_NOT_FOUND
         //kind of "exists"
         if (machineName == null) {
@@ -323,6 +323,7 @@ public class VBoxManager {
         machine.lockMachine(session, LockType.Write);
         IMachine mutable = session.getMachine();
         mutable.getVRDEServer().setVRDEProperty("TCP/Ports", port);
+        mutable.getVRDEServer().setEnabled(true);
         mutable.saveSettings();
         session.unlockMachine();
 

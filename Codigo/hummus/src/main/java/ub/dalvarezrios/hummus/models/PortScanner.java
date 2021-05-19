@@ -20,7 +20,7 @@ public class PortScanner {
 
     }
 
-    public boolean isPortInUse(String host, int port) {
+    private boolean isPortInUse(String host, int port) {
 
         // Assume no connection is possible.
         boolean result = false;
@@ -36,7 +36,7 @@ public class PortScanner {
         return result;
     }
 
-    public boolean isPortInDB(String port){
+    private boolean isPortInDB(String port){
 
         List<VirtualMachine> vms = vmService.findAll();
 
@@ -49,5 +49,18 @@ public class PortScanner {
         }
         return false;
     }
+
+    public String getAvailablePort(){
+        String port = "";
+        for(int i = 1024; i < 65665; i++){
+            String port_str = Integer.toString(i);
+            if(!isPortInDB(port_str) && !isPortInUse("localhost", i)){
+                port = port_str;
+                break;
+            }
+        }
+        return port;
+    }
+
 
 }
