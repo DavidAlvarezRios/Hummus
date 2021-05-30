@@ -8,7 +8,7 @@
 <body>
     <table th:if="${not exercices.isEmpty()}">
         <tr th:each="exercise: ${exercices}">
-            <a th:href="@{exercise/${exercise.id}}"></a>
+            <a th:href="@{exercises/exercise/{id}(id = ${exercise.getId()})}" th:text="${exercise.getName()}"></a><br>
         </tr>
     </table>
 

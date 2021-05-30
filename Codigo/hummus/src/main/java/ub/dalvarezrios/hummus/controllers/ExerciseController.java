@@ -38,7 +38,6 @@ public class ExerciseController {
 
     @GetMapping("")
     public String exercises(Model model){
-        _logger.info("Hola he entrado aqui");
         List<Exercise> exercises = exerciseService.findAll();
         model.addAttribute("titulo", "Ejercicios");
         model.addAttribute("exercices", exercises);
