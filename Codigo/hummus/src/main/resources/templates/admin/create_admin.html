@@ -10,7 +10,7 @@
 <div th:replace="~{header :: header}">Header</div>
 <div class="container">
     <div class="d-flex justify-content-center my-md-5">
-        <form th:action="@{/admin/create_admin}" th:object="${user}" method="post">
+        <form th:action="@{/admin/create_admin}" th:object="${admin}" method="post">
 
             <div>
                 <label for="username" class="form-label">Username</label>

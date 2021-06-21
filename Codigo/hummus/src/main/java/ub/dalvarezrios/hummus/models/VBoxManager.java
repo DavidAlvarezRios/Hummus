@@ -8,9 +8,6 @@ import ub.dalvarezrios.hummus.models.entity.DHCPServer;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author donhk
- */
 public class VBoxManager {
 
     private final VirtualBoxManager boxManager;
@@ -28,10 +25,6 @@ public class VBoxManager {
         return vbox.findMachine(name);
     }
 
-    public String getVBoxVersion() {
-        return vbox.getVersion();
-    }
-
     public List<IMachine> getMachines(MachineState state) {
         List<IMachine> iMachines = new ArrayList<>();
         for (IMachine machine : vbox.getMachines()) {
@@ -40,54 +33,6 @@ public class VBoxManager {
             }
         }
         return iMachines;
-    }
-
-    public boolean cloneMachineFromSeed(String seedName, String snapshot, String machineName) {
-        if (!machineExists(seedName)) {
-            return false;
-        }
-        IMachine seedMachine = vbox.findMachine(seedName);
-        if (!snapshotExists(seedMachine, snapshot)) {
-            return false;
-        }
-        ISnapshot iSnapshot = seedMachine.findSnapshot(snapshot);
-
-        IMachine sourceMachine = iSnapshot.getMachine();
-        //create a new empty machine container
-        IMachine newMachine = boxManager.getVBox().createMachine(
-                null/*settingsFile*/,
-                machineName/*name*/,
-                null/*groups[]*/,
-                seedMachine.getOSTypeId()/*osTypeId*/,
-                "forceOverwrite=1"/*flags*/
-        );
-        //prepare setting to clone this machine
-        List<CloneOptions> options = new ArrayList<>();
-        //we want it to be a clone to save space
-        options.add(CloneOptions.Link);
-        //start cloning
-        IProgress progress = sourceMachine.cloneTo(newMachine, CloneMode.MachineState, options);
-        wait(progress);
-        //save changes and register
-        newMachine.saveSettings();
-        vbox.registerMachine(newMachine);
-        return true;
-    }
-
-    public boolean addSharedDirectory(String machineName, String dirName, String hostPath) {
-        if (!machineExists(machineName)) {
-            return false;
-        }
-        IMachine machine = vbox.findMachine(machineName);
-        ISession session = boxManager.getSessionObject();
-        machine.lockMachine(session, LockType.Write);
-        try {
-            session.getMachine().createSharedFolder(dirName, hostPath, true, true, "");
-            session.getMachine().saveSettings();
-        } finally {
-            waitToUnlock(session, machine);
-        }
-        return true;
     }
 
     public boolean launchMachine(String machineName, LaunchMode mode) {
@@ -116,42 +61,6 @@ public class VBoxManager {
         return true;
     }
 
-    public boolean addPortForwardRule(String networkName, int hostPort, int guestPort, String machineName) {
-        String ipv4 = getMachineIPv4(machineName);
-        if (ipv4 == null) {
-            return false;
-        }
-        if (!natNetworkExists(networkName)) {
-            return false;
-        }
-        INATNetwork natNet = vbox.findNATNetworkByName(networkName);
-        natNet.addPortForwardRule(
-                /*isIpv6*/false,
-                /*ruleName*/"ssh" + hostPort,
-                /*proto*/NATProtocol.TCP,
-                /*hostIP*/"0.0.0.0",
-                /*hostPort*/hostPort,
-                /*guestIP*/ipv4,
-                /*guestPort*/guestPort
-        );
-
-        return true;
-    }
-
-    public void rmPortForwardRule(String networkName, int hostPort) {
-        if (!natNetworkExists(networkName)) {
-            return;
-        }
-        INATNetwork natNet = vbox.findNATNetworkByName(networkName);
-        String ruleName = "ssh" + hostPort;
-        //make sure the rule exists before attempt to drop it
-        for (String rule : natNet.getPortForwardRules4()) {
-            if (rule.startsWith(ruleName)) {
-                natNet.removePortForwardRule(false, ruleName);
-            }
-        }
-    }
-
     public String getMachineIPv4(String machineName) {
         if (!machineExists(machineName)) {
             return null;
@@ -178,74 +87,10 @@ public class VBoxManager {
         return ipv4;
     }
 
-    public synchronized void cleanUpVM(String machineName) {
-        if (!machineExists(machineName)) {
-            return;
-        }
-        IMachine machine = vbox.findMachine(machineName);
-        MachineState state = machine.getState();
-        ISession session = boxManager.getSessionObject();
-        machine.lockMachine(session, LockType.Shared);
-        try {
-            if (state.value() >= MachineState.FirstOnline.value() && state.value() <= MachineState.LastOnline.value()) {
-                IProgress progress = session.getConsole().powerDown();
-                wait(progress);
-            }
-        } finally {
-            waitToUnlock(session, machine);
-            System.err.println("Deleting machine " + machineName);
-            List<IMedium> media = machine.unregister(CleanupMode.DetachAllReturnHardDisksOnly);
-            machine.deleteConfig(media);
-        }
-    }
-
     public IProgress getProgress() {
         return progress;
     }
 
-    /**
-     * +---------[powerDown()] <- Stuck <--[failure]-+
-     * V                                             |
-     * +-> PoweredOff --+-->[powerUp()]--> Starting --+      | +-----[resume()]-----+
-     * |                |                             |      | V                    |
-     * |   Aborted -----+                             +--> Running --[pause()]--> Paused
-     * |                                              |      ^ |                   ^ |
-     * |   Saved -----------[powerUp()]--> Restoring -+      | |                   | |
-     * |     ^                                               | |                   | |
-     * |     |     +-----------------------------------------+-|-------------------+ +
-     * |     |     |                                           |                     |
-     * |     |     +- OnlineSnapshotting <--[takeSnapshot()]<--+---------------------+
-     * |     |                                                 |                     |
-     * |     +-------- Saving <--------[saveState()]<----------+---------------------+
-     * |                                                       |                     |
-     * +-------------- Stopping -------[powerDown()]<----------+---------------------+
-     *
-     * @param machineName target machine
-     */
-    private void shutdownMachine(String machineName) {
-        if (!machineExists(machineName)) {
-            return;
-        }
-        IMachine machine = vbox.findMachine(machineName);
-        MachineState state = machine.getState();
-        ISession session = boxManager.getSessionObject();
-        machine.lockMachine(session, LockType.Shared);
-        try {
-            if (state.value() >= MachineState.FirstOnline.value() && state.value() <= MachineState.LastOnline.value()) {
-                IProgress progress = session.getConsole().powerDown();
-                wait(progress);
-            }
-        } finally {
-            waitToUnlock(session, machine);
-        }
-    }
-
-    /**
-     * Wait untill the current session is unlocked
-     *
-     * @param session session
-     * @param machine machine
-     */
     private void waitToUnlock(ISession session, IMachine machine) {
         session.unlockMachine();
         SessionState sessionState = machine.getSessionState();
@@ -260,21 +105,7 @@ public class VBoxManager {
         }
     }
 
-    /**
-     * Waits until a tasks finished
-     * <p>
-     * Progress object to track the operation completion. Expected result codes:
-     * E_UNEXPECTED	Virtual machine not registered.
-     * E_INVALIDARG	Invalid session type type.
-     * VBOX_E_OBJECT_NOT_FOUND	No machine matching machineId found.
-     * VBOX_E_INVALID_OBJECT_STATE	Session already open or being opened.
-     * VBOX_E_IPRT_ERROR	Launching process for machine failed.
-     * VBOX_E_VM_ERROR	Failed to assign machine to session.
-     *
-     * @param progress current task monitor
-     */
     private void wait(IProgress progress) {
-        //make this available for the caller
         this.progress = progress;
         progress.waitForCompletion(-1);
         if (progress.getResultCode() != 0) {
@@ -283,14 +114,9 @@ public class VBoxManager {
     }
 
     public boolean machineExists(String machineName) {
-        ///VBOX_E_OBJECT_NOT_FOUND
-        //kind of "exists"
         if (machineName == null) {
             return false;
         }
-        //since the method findMachine returns org.virtualbox_5_2.VBoxExceptio
-        //if the machine doesn't exists we will need to find it by
-        //ourselves iterating over all the machines
         List<IMachine> machines = vbox.getMachines();
         for (IMachine machine : machines) {
             if (machine.getName().equals(machineName)) {
@@ -300,22 +126,6 @@ public class VBoxManager {
         return false;
     }
 
-    private boolean snapshotExists(IMachine machine, String snapshot) {
-        ///VBOX_E_OBJECT_NOT_FOUND
-        return machine.findSnapshot(snapshot) != null;
-    }
-
-    private boolean natNetworkExists(String networkName) {
-        if (networkName == null) {
-            return false;
-        }
-        for (INATNetwork network : vbox.getNATNetworks()) {
-            if (network.getNetworkName().equals(networkName)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public void setPortVRDE(String nameMachine, String port){
         IMachine machine = findMachine(nameMachine);

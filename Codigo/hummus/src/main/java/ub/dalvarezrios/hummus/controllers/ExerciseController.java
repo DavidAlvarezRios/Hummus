@@ -89,11 +89,9 @@ public class ExerciseController {
             for(VirtualMachine vm: vms){
                 vmNames.add(vm.getVm_name());
             }
-            _logger.info(vmNames);
             DHCPServer dhcpConf = new DHCPServer();
             String dhcp_name = actualExercise.getName().concat(".").concat(principal.getName());
             dhcpConf.autoconfigure(dhcp_name);
-            _logger.info(dhcpConf.getNetname());
             vBoxManager.assignInternalNetworkFromMachineNames(dhcp_name ,vmNames, dhcpConf);
         }
 

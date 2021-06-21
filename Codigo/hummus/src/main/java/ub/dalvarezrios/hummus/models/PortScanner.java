@@ -52,7 +52,7 @@ public class PortScanner {
 
     public String getAvailablePort(){
         String port = "";
-        for(int i = 1024; i < 65665; i++){
+        for(int i = 1024; i < 65535; i++){
             String port_str = Integer.toString(i);
             if(!isPortInDB(port_str) && !isPortInUse("localhost", i)){
                 port = port_str;

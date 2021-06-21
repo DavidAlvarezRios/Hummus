@@ -6,11 +6,19 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
 </head>
 <body>
-    <table th:if="${not machines.isEmpty()}">
+<div th:replace="~{header :: header}">Header</div>
+<div class="container">
+<div class="row">
+<div class="col-auto">
+    <table th:if="${not machines.isEmpty()}" class="table table-responsive">
         <tr th:each="maquina: ${machines}">
-            <a th:href="@{/mv(machineName=${maquina.getVm_name()})}" th:text="${maquina.getVm_name()}"></a>
-            <br>
+            <td>
+                <a th:href="@{/mv(machineName=${maquina.getVm_name()})}" th:text="${maquina.getVm_name()}"></a>
+            </td>
         </tr>
     </table>
+</div>
+</div>
+</div>
 </body>
 </html>

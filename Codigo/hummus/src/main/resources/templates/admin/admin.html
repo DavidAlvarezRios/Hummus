@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8" />
+    <title th:text="${titulo}"></title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+
+
 </head>
 <body>
+
+<div th:replace="~{header :: header}">Header</div>
+<div class="container">
+<div class="row">
+    <div class="col-auto">
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>
+                    <a th:href="@{/admin/create_exercise}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Crear ejercicio</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a th:href="@{/admin/create_vm}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Crear máquina</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+</div>
 
 </body>
 </html>

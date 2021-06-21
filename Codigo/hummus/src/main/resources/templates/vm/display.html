@@ -13,13 +13,10 @@
     <div id="display"></div>
     <!-- Init -->
     <script type="text/javascript" th:inline="javascript"> /* <![CDATA[ */
-    console.log("hola");
     // Get display div from document
     var display = document.getElementById("display");
-    console.log("hola");
     // Instantiate client, using an HTTP tunnel for communications.
     var port = /*[[${port}]]*/ "";
-    console.log(port);
     var guac = new Guacamole.Client(
         new Guacamole.HTTPTunnel("tunnel")
     );

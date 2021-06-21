@@ -20,7 +20,7 @@
             </div>
 
             <div>
-                <label for="exercise" class="form-label" >Num of Vms</label>
+                <label for="exercise" class="form-label" >Exercise</label>
                 <div>
                     <input class="form-control" type="text" th:field="*{exercise}" id="exercise" th:errorclass="'form-control alert-danger'" />
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('exercise')}" th:errors="*{exercise}"></small>
@@ -28,7 +28,7 @@
             </div>
 
             <div>
-                <label for="type" class="form-label" >Num of Vms</label>
+                <label for="type" class="form-label" >Type</label>
                 <div>
                     <input class="form-control" type="text" th:field="*{type}" id="type" th:errorclass="'form-control alert-danger'" />
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></small>
@@ -41,6 +41,6 @@
 
         </form>
     </div>
-
+</div>
 </body>
 </html>
